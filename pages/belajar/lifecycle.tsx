@@ -1,27 +1,34 @@
-import { ChangeEvent, useState } from "react";
-import { useCapsules } from "../../src/hooks/useCapsules";
+import { ChangeEvent, FunctionComponent, useState } from "react";
+import { ISpaceXResponse, useCapsules } from "../../src/hooks/useCapsules";
+import { GetServerSideProps } from "next";
 
-const Lifecycle = () => {
-  //  - [x] lifecycle
-  //  - [x] map & keys
-  // - [ ] custom hook
+const Lifecycle: FunctionComponent<{ data: ISpaceXResponse[] }> = (props) => {
+  // - [x] lifecycle
+  // - [x] map & keys
+  // - [x] custom hook
+  // - [x] serverside fetch
   // - [ ] custom component
-  // - [ ] serverside fetch
 
-  const [contohDependency, setContohDependency] = useState<string>(() => "");
+  const [capsule_id, setCapsule_id] = useState<string>(() => "");
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setContohDependency(event.target.value);
+    setCapsule_id(event.target.value);
   };
 
-  const spaceXCapsulesData = useCapsules();
+  const spaceXCapsulesData = useCapsules(
+    {
+      capsule_id,
+      status: "unknown",
+    },
+    props.data
+  );
 
   return (
     <div className="container lg:min-w-1/2 mx-auto">
-      <h1>value kita: {contohDependency}</h1>
+      <h1>value kita: {capsule_id}</h1>
       <input
         className="border-black border"
         id="contoh-dependency"
-        value={contohDependency}
+        value={capsule_id}
         onChange={handleInput}
       />
       {spaceXCapsulesData.map((capsule) => (
@@ -40,6 +47,17 @@ const Lifecycle = () => {
       ))}
     </div>
   );
+};
+
+//@ts-ignore
+export const getServerSideProps: GetServerSideProps = async () => {
+  const data = await fetch("https://api.spacexdata.com/v3/capsules")
+    .then((response) => response.json())
+    .then((data: ISpaceXResponse[]) => data);
+
+  return {
+    props: { data },
+  };
 };
 
 export default Lifecycle;

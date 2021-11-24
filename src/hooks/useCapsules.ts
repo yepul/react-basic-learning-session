@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type TMissions = {
   name: string;
   flight: number;
 };
 
-interface ISpaceXResponse {
+export interface ISpaceXResponse {
   capsule_serial: string;
   capsule_id: string;
   status: string;
@@ -29,7 +29,10 @@ type TQuery = {
   reuse_count?: number;
 };
 
-export const useCapsules = (params: TQuery) => {
+export const useCapsules = (
+  params: TQuery,
+  initialData: ISpaceXResponse[] | [] = []
+) => {
   /**
    * {
    *     capsule_id: 'dragon1',
@@ -38,7 +41,6 @@ export const useCapsules = (params: TQuery) => {
    *
    * => ?capsule_id=dragon1&status=unknown
    */
-
   const query = useMemo(() => {
     const resource = Object.entries(params);
     if (!resource.length) {
@@ -50,15 +52,21 @@ export const useCapsules = (params: TQuery) => {
 
   const [spaceXCapsulesData, setSpaceXCapsulesData] = useState<
     ISpaceXResponse[] | []
-  >(() => []);
+  >(() => initialData);
+
+  const isMounted = useRef(false);
 
   useEffect(() => {
-    fetch("https://api.spacexdata.com/v3/capsules" + query)
-      .then((response) => response.json())
-      .then((data: ISpaceXResponse[]) => {
-        setSpaceXCapsulesData(data);
-      });
-  }, [query]);
+    if (isMounted.current) {
+      fetch("https://api.spacexdata.com/v3/capsules" + query)
+        .then((response) => response.json())
+        .then((data: ISpaceXResponse[]) => {
+          setSpaceXCapsulesData(data);
+        });
+    } else {
+      isMounted.current = true;
+    }
+  }, [query, isMounted]);
 
   return spaceXCapsulesData;
 };
