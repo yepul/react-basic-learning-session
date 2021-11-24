@@ -1,46 +1,19 @@
-import { ChangeEvent, useEffect, useState } from "react";
-
-type TMissions = {
-  name: string;
-  flight: number;
-};
-
-interface ISpaceXResponse {
-  capsule_serial: string;
-  capsule_id: string;
-  status: string;
-  original_launch: string;
-  original_launch_unix: number;
-  missions: TMissions[];
-  landings: number;
-  type: string;
-  details: string;
-  reuse_count: number;
-}
+import { ChangeEvent, useState } from "react";
+import { useCapsules } from "../../src/hooks/useCapsules";
 
 const Lifecycle = () => {
   //  - [x] lifecycle
   //  - [x] map & keys
-  // - [ ] custom component
   // - [ ] custom hook
+  // - [ ] custom component
   // - [ ] serverside fetch
 
   const [contohDependency, setContohDependency] = useState<string>(() => "");
-  const [spaceXCapsulesData, setSpaceXCapsulesData] = useState<
-    ISpaceXResponse[] | []
-  >(() => []);
-
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
     setContohDependency(event.target.value);
   };
 
-  useEffect(() => {
-    fetch("https://api.spacexdata.com/v3/capsules")
-      .then((response) => response.json())
-      .then((data: ISpaceXResponse[]) => {
-        setSpaceXCapsulesData(data);
-      });
-  }, []);
+  const spaceXCapsulesData = useCapsules();
 
   return (
     <div className="container lg:min-w-1/2 mx-auto">
