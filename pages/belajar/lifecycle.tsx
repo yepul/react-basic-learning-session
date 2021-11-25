@@ -1,27 +1,23 @@
 import { ChangeEvent, FunctionComponent, useState } from "react";
-import { ISpaceXResponse, useCapsules } from "../../src/hooks/useCapsules";
+import { ISpaceXResponse, useCapsules } from "@/src/hooks/useCapsules";
 import { GetServerSideProps } from "next";
-import { HeroBanner } from "../../src/components/HeroBanner";
+import { HeroBanner } from "@/src/components/HeroBanner";
+import { CapsuleCard } from "@/src/components/CapsuleCard";
+import { Container } from "@/src/components/Container";
 
 const Lifecycle: FunctionComponent<{ data: ISpaceXResponse[] }> = (props) => {
   // - [x] lifecycle
   // - [x] map & keys
   // - [x] custom hook
   // - [x] serverside fetch
-  // - [ ] custom component
+  // - [x] custom component
 
   const [capsule_id, setCapsule_id] = useState<string>(() => "");
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
     setCapsule_id(event.target.value);
   };
 
-  const spaceXCapsulesData = useCapsules(
-    {
-      capsule_id,
-      status: "unknown",
-    },
-    props.data
-  );
+  const spaceXCapsulesData = useCapsules({}, props.data);
 
   return (
     <div className="mb-5">
@@ -39,20 +35,13 @@ const Lifecycle: FunctionComponent<{ data: ISpaceXResponse[] }> = (props) => {
           </>
         }
       />
-      {spaceXCapsulesData.map((capsule) => (
-        <div key={capsule.capsule_serial}>
-          <div>status: {capsule.status}</div>
-          <div>id: {capsule.capsule_id}</div>
-          <div>
-            missions:
-            {capsule.missions.map((mission) => (
-              <div key={mission.name + mission.flight}>
-                name: {mission.name}, flight: {mission.flight}
-              </div>
-            ))}
-          </div>
+      <Container>
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+          {spaceXCapsulesData.map((capsule: ISpaceXResponse) => (
+            <CapsuleCard key={capsule.capsule_serial} {...capsule} />
+          ))}
         </div>
-      ))}
+      </Container>
     </div>
   );
 };
