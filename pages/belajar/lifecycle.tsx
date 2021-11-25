@@ -1,6 +1,7 @@
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { ISpaceXResponse, useCapsules } from "../../src/hooks/useCapsules";
 import { GetServerSideProps } from "next";
+import { HeroBanner } from "../../src/components/HeroBanner";
 
 const Lifecycle: FunctionComponent<{ data: ISpaceXResponse[] }> = (props) => {
   // - [x] lifecycle
@@ -23,13 +24,20 @@ const Lifecycle: FunctionComponent<{ data: ISpaceXResponse[] }> = (props) => {
   );
 
   return (
-    <div className="container lg:min-w-1/2 mx-auto">
-      <h1>value kita: {capsule_id}</h1>
-      <input
-        className="border-black border"
-        id="contoh-dependency"
-        value={capsule_id}
-        onChange={handleInput}
+    <div className="mb-5">
+      {/*// hero banner
+          xs => safe value
+          md => ipad vertical
+          lg => desktop
+      */}
+      <HeroBanner
+        title={
+          <>
+            apa-apa dekat sini, dia feeling.
+            <br />
+            yepul nanti dapat PS5 dia feeling jugak
+          </>
+        }
       />
       {spaceXCapsulesData.map((capsule) => (
         <div key={capsule.capsule_serial}>
