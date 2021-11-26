@@ -34,7 +34,7 @@ const Lifecycle: FunctionComponent<{ data: ISpaceXResponse[] }> = (props) => {
         <meta property="og:type" content="website" />
         <meta
           property="og:url"
-          content="https://www.github.com/mkxhmn/siri-mengajar"
+          content="https://www.github.com/yepul/react-basic-learning-session"
         />
         <meta property="og:title" content="Siri Mengajar Lifecycle" />
         <meta
@@ -49,7 +49,7 @@ const Lifecycle: FunctionComponent<{ data: ISpaceXResponse[] }> = (props) => {
         <meta property="twitter:card" content="summary_large_image" />
         <meta
           property="twitter:url"
-          content="https://www.github.com/mkxhmn/siri-mengajar"
+          content="https://www.github.com/yepul/react-basic-learning-session"
         />
         <meta property="twitter:title" content="Siri Mengajar Lifecycle" />
         <meta
