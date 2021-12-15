@@ -8,4 +8,9 @@ export interface IStoreModel {
   capsules: ICapsulesModel;
 }
 
-export const store = createStore<IStoreModel>({ capsules });
+export const store = createStore<IStoreModel>(
+  { capsules },
+  {
+    name: "space-store-model",
+  }
+);
