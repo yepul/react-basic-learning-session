@@ -8,15 +8,18 @@ export const Card: FunctionComponent<ISpaceXResponse> = (capsule) => {
   const setFavorite = useStoreActions(
     (actions) => actions.capsules.setFavorite
   );
-
-  const handleSetFavorite = () => {
-    setFavorite(capsule);
-  };
+  const removeFavorite = useStoreActions(
+    (actions) => actions.capsules.removeFavorite
+  );
 
   const isFavorite = useMemo(
     () => favorites.includes(capsule),
     [favorites, capsule]
   );
+
+  const handleSetFavorite = () => {
+    isFavorite ? removeFavorite(capsule) : setFavorite(capsule);
+  };
 
   return (
     <div className="py-8 px-4 bg-white rounded-md shadow-md">

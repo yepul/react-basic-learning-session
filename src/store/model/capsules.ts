@@ -5,6 +5,7 @@ export interface ICapsulesModel {
   favorites: ISpaceXResponse[];
   lastUpdated: string;
   setFavorite: Action<ICapsulesModel, ISpaceXResponse>;
+  removeFavorite: Action<ICapsulesModel, ISpaceXResponse>;
   onSetFavorite: ActionOn<ICapsulesModel>;
 }
 
@@ -16,6 +17,12 @@ export const capsulesModel: ICapsulesModel = {
   //actions
   setFavorite: action((state, payload) => {
     state.favorites.push(payload);
+  }),
+
+  removeFavorite: action((state, payload) => {
+    state.favorites = state.favorites.filter(
+      (item) => item.capsule_serial !== payload.capsule_serial
+    );
   }),
 
   onSetFavorite: actionOn(
