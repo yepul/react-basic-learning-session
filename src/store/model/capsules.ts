@@ -2,7 +2,7 @@ import { action, Action, actionOn, ActionOn } from "easy-peasy";
 import { ISpaceXResponse } from "@/src/hooks/useCapsules";
 
 export interface ICapsulesModel {
-  favorite: ISpaceXResponse[];
+  favorites: ISpaceXResponse[];
   lastUpdated: string;
   setFavorite: Action<ICapsulesModel, ISpaceXResponse>;
   onSetFavorite: ActionOn<ICapsulesModel>;
@@ -10,12 +10,12 @@ export interface ICapsulesModel {
 
 export const capsulesModel: ICapsulesModel = {
   //state
-  favorite: [],
+  favorites: [],
   lastUpdated: "",
 
   //actions
   setFavorite: action((state, payload) => {
-    state.favorite.push(payload);
+    state.favorites.push(payload);
   }),
 
   onSetFavorite: actionOn(
