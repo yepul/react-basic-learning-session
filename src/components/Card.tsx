@@ -1,7 +1,16 @@
 import { FunctionComponent, useMemo } from "react";
 import { ISpaceXResponse } from "../hooks/useCapsules";
-import { FavoriteButton } from "@/src/components/FavoriteButton";
 import { useStoreActions, useStoreState } from "@/src/store/hooks";
+import dynamic from "next/dynamic";
+import { IFavoriteButton } from "@/src/components/FavoriteButton";
+
+const FavoriteButton = dynamic(
+  () =>
+    import("@/src/components/FavoriteButton").then<
+      FunctionComponent<IFavoriteButton>
+    >((mod) => mod.FavoriteButton),
+  { ssr: false }
+);
 
 export const Card: FunctionComponent<ISpaceXResponse> = (capsule) => {
   const favorites = useStoreState((state) => state.capsules.favorites);
@@ -12,8 +21,11 @@ export const Card: FunctionComponent<ISpaceXResponse> = (capsule) => {
     (actions) => actions.capsules.removeFavorite
   );
 
-  const isFavorite = useMemo(
-    () => favorites.includes(capsule),
+  const isFavorite = useMemo<boolean>(
+    () =>
+      !!favorites.find(
+        (item) => item.capsule_serial === capsule.capsule_serial
+      ),
     [favorites, capsule]
   );
 
